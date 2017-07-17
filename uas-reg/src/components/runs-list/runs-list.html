@@ -1,0 +1,93 @@
+<runs-list>
+  <faq show-faq="runsList.showFaq"></faq>
+  <md-content class="run-list" layout="column" flex>
+    <md-toolbar class="md-table-toolbar md-default">
+      <div class="md-toolbar-tools">
+        <span>Runs</span>
+        <md-button class="md-icon-button disclaimer-button" aria-label="Disclaimer" ng-click="runsList.showDisclaimer()">
+            <md-tooltip md-direction="bottom">
+              Disclaimer
+            </md-tooltip>
+          <md-icon class="mdi mdi-file-document-box"></md-icon>
+        </md-button>
+        <md-button class="md-icon-button faq-button" aria-label="FAQ" ng-click="runsList.showFaq = true">
+            <md-tooltip md-direction="bottom">
+              Help
+            </md-tooltip>
+          <md-icon class="mdi mdi-help-circle-outline"></md-icon>
+        </md-button>
+        <md-button class="md-icon-button logout-button" aria-label="Log out" ng-href="{{runsList.logoutEndpoint}}">
+            <md-tooltip md-direction="bottom">
+              Logout
+            </md-tooltip>
+            <md-icon class="mdi mdi-logout-variant"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-table-container>
+      <div class="filter-toolbar" layout="row" layout-align="start center" ng-if="runsList.selected.length === 0">
+        <span>Between:</span>
+        <md-datepicker ng-model="runsList.runsStore.startDate"
+                        ng-change="runsList.changeDateFilter()"
+                        md-max-date="runsList.runsStore.endDate"
+                        md-placeholder="Enter date"></md-datepicker>
+        <md-datepicker ng-model="runsList.runsStore.endDate"
+                        ng-change="runsList.changeDateFilter()"
+                        md-min-date="runsList.runsStore.startDate"
+                        md-max-date="runsList.runsStore.today"
+                        md-placeholder="Enter date"></md-datepicker>
+        <div flex class="separator"></div>
+        <div class="search">
+          <md-icon class="mdi mdi-magnify"></md-icon>
+          <input type="search" ng-model="runsList.searchText" ng-model-options="{debounce: 300}" placeholder="Search" />
+        </div>
+      </div>
+      <div class="multiple-actions" layout="row" layout-align="start center" ng-if="runsList.selected.length > 0">
+        <span>Selected: {{runsList.selected.length}} runs</span>
+        <div flex></div>
+        <md-button ng-click="runsList.aria2Selected($event)">Download aria2 config</md-button>
+        <md-button ng-click="runsList.downloadSelected($event)">Download files</md-button>
+        <md-button ng-click="runsList.copySelected($event)">Copy links</md-button>
+      </div>
+      <table md-table
+             md-row-select
+             ng-model="runsList.selected"
+             multiple
+             ng-hide="runsList.searchText && runsList.runsStore.items.length === 0">
+
+        <thead md-head md-order="runsList.sortExpression">
+          <tr md-row>
+            <th md-column class="name-column" md-order-by="name">Name</th>
+            <th md-column class="pipeline-column" md-order-by="pipeline">Pipeline</th>
+            <th md-column class="ini-column" md-order-by="ini_name">Settings</th>
+            <th md-column class="date-column" md-order-by="createTime">Create date</th>
+          </tr>
+        </thead>
+
+        <tbody md-body>
+          <tr md-row md-select="run"
+              md-select-id="run"
+              ng-disabled="!run.files || run.files.length === 0"
+              ng-repeat="run in runsList.runsStore.items">
+            <td md-cell>{{run.name}}</td>
+            <td md-cell>{{run.pipeline}}</td>
+            <td md-cell>{{run.ini_name.replace('.ini', '')}}</td>
+            <td md-cell>{{run.createTime | date : format : medium}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p ng-if="runsList.runsStore.isLoading">Loading...</p>
+      <p ng-if="!runsList.runsStore.isLoading && !runsList.loadingError && !runsList.searchText && runsList.runsStore.items.length === 0">No runs found...</p>
+      <p ng-if="runsList.searchText && runsList.runsStore.items.length === 0">No results matching: '{{runsList.searchText}}'</p>
+      <p ng-if="runsList.loadingError">An error occured, try again later....</p>
+    </md-table-container>
+
+    <md-table-pagination ng-if="runsList.runsStore.items.length > 0"
+                              md-limit="runsList.pagination.limit"
+                              md-limit-options="runsList.paginationLimits"
+                              md-page="runsList.pagination.page"
+                              md-total="{{runsList.pagination.total}}"
+                              md-boundary-links="true">
+    </md-table-pagination>
+  </md-content>
+</run-list>

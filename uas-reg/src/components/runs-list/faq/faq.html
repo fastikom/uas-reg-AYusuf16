@@ -1,0 +1,53 @@
+<div class="faq-header" ng-if="faq.showFaq">
+  <div class="container">
+    <md-button class="md-icon-button" ng-click="faq.showFaq = false">
+      <md-icon class="mdi mdi-close"></md-icon>
+    </md-button>
+    <div class="content">
+      <h2>Hartwig Medical Foundation Download Portal</h2>
+      <h3>The portal</h3>
+      <p>This portal allows view/download of data from our analysis pipeline. For each sample/patient certain files can be downloaded by creating links (valid for 24 hours). The links can be used to download (via browser or command line tools) or, in the case of indexed files like the BAM format, directly read (stream) by software like IGV (Integrative Genome Browser).</p>
+
+      <h3>Good to know</h3>
+      <ul>
+        <li>Files can be very large (up to 300GB) so please check before starting a download!</li>
+        <li>The session time is 4 hours, after this period you will have to login again</li>
+        <li>Links are valid for 24 hours, after this period you will have to create new links</li>
+        <li>This portal contains "molecular" data, no clinical information (for data requests that require clinical information please see our <a href="https://www.hartwigmedicalfoundation.nl/databeleid/" target="_blank">Data Policy</a>)</li>
+        <li>Examples of available data formats are BAM, gVCF and VCF</li>
+        <li>See below for some usage examples</li>
+      </ul>
+      <p>Please let us know if you have comments or want to share your portal experience. For more information and contact please visit our <a href="https://www.hartwigmedicalfoundation.nl" target="_blank">website</a>.</p>
+
+      <h2>Usage examples</h2>
+      
+      <p>There are three options to retrieve files. When you use the checkboxes to select one or more datasets/rows these options appear at the top right above the table:</p>
+      <ul>
+        <li>DOWNLOAD ARIA2 CONFIG</li>
+        <li>DOWNLOAD FILES</li>
+        <li>COPY LINKS</li>
+      </ul>
+      
+      <h3>Example download using aria2:</h3>
+      <p>For downloading files on the command line we highly recommend to use the <a href="https://aria2.github.io" target="_blank">aria2 download tool</a>. When using this method files are saved to a separate directory per analysis and md5 checksum check is included.</p>
+      <ul>
+        <li>download the config file (use the "DOWNLOAD ARIA2 CONFIG" option)</li>
+        <li>and start a download with the following code:</li>
+      </ul>
+      <code>aria2c -x 5 -c -i aria2.txt</code>
+
+      <h3>Example download using browser:</h3>
+      <p>Use the option "DOWNLOAD FILES" to directly start a download in your browser, for example to quickly view a pdf or other small file.</p>
+
+      <h3>Example loading BAM file in IGV:</h3>
+      <ul>
+        <li>create links for BAM and accompanying BAI file (use the "COPY LINKS" option)</li>
+        <li>open the IGV program and choose option "Load from URL"</li>
+        <li>paste the BAM file link at field "File URL"</li>
+        <li>paste the BAI file link at field "Index URL"</li>
+      </ul>
+
+      <md-button class="md-primary md-raised" ng-click="faq.showFaq = false">Close</md-button>
+    </div>
+  </div>
+</div>
